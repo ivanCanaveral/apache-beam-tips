@@ -20,3 +20,35 @@
 ```python
 [output PCollection] = [Input PCollection] | [Transform]
 ```
+
+Transforms can be chained also:
+
+```python
+[Final Output PCollection] = (
+    [Initial Input PCollection] 
+        | [First Transform]
+        | [Second Transform]
+        | [Third Transform]
+    )
+```
+
+We can apply several **Transforms** to the same collection to create a branching pipeline.
+
+### ParDo
+
+Apply computations on each element of the dataset. If you want to apply a `ParDo` computation, your code should be an instace of `DoFn`, which defines a distributed function. It should follow this structure:
+
+```python
+class MyFn(beam.DoFn):
+  def process(self, element):
+    return iterable / yield element
+```
+
+If the elements are key-value pairs, we can use `element.getKey()` and `element.getValue()` to get them.
+
+* **Idempotence**: Our functions may be invoked multiple times on a given worker node to ennsure for failure recovery. We should make sure the implementation does not depend on the number of invocations.
+* **Immutability**: We should not modify the `element` object.
+
+### Maps
+
+If your `DoFn` is quite simple, you can use higher order funcitions like `Map` or `FlatMap`.
