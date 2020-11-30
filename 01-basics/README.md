@@ -73,10 +73,37 @@ b, [2,4]
 
 ### CoGroupByKey
 
-Applyes a `GroupByKey` using data from different PCollections. The result is a dictionary with all the gruped elements per collection:
+Applies a `GroupByKey` using data from different PCollections. The result is a dictionary with all the gruped elements per collection:
 
 ```
 ('a', {'singles': [4, '1'], 'couples': ['11']})
 ('b', {'singles': ['2'], 'couples': ['22']})
 ('c', {'singles': ['3'], 'couples': ['33']})
+```
+
+### Combine
+
+Combines a set of values from a **PCollection**, given a function that defines the way to combine elements.
+
+This function should be *asociative* and *commutative*, two basic requirements for this kind of reducing parallelizations.
+
+As for `DoPar`, if our combining logic is complex, we can write an scpecific subclass of `beam.CombineFn`.
+
+We can use uses `CombineGlobally` or `CombinePerKey`.
+
+For a custom Combiner, we will need to implement four methods:
+
+```python
+class AverageFn(beam.CombineFn):
+  def create_accumulator(self):
+    ...
+
+  def add_input(self, accumulator, input):
+    ...
+
+  def merge_accumulators(self, accumulators):
+    ...
+
+  def extract_output(self, accumulator):
+    ...
 ```
