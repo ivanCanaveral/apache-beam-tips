@@ -52,3 +52,31 @@ If the elements are key-value pairs, we can use `element.getKey()` and `element.
 ### Maps
 
 If your `DoFn` is quite simple, you can use higher order funcitions like `Map` or `FlatMap`.
+
+### GroupByKey
+
+Gruops by key, and collects the values. For example, if we apply a GroupByKey to the following data
+
+```
+a, 1
+b, 2
+a, 3
+b, 4
+```
+
+we get:
+
+```
+a, [1,3]
+b, [2,4]
+```
+
+### CoGroupByKey
+
+Applyes a `GroupByKey` using data from different PCollections. The result is a dictionary with all the gruped elements per collection:
+
+```
+('a', {'singles': [4, '1'], 'couples': ['11']})
+('b', {'singles': ['2'], 'couples': ['22']})
+('c', {'singles': ['3'], 'couples': ['33']})
+```
