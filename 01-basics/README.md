@@ -107,3 +107,7 @@ class AverageFn(beam.CombineFn):
   def extract_output(self, accumulator):
     ...
 ```
+
+### Flatten
+
+Flatten takes a tuple of **PCollections** that stores elements of the same type and returns a single **PCollection** that contains all elements from those tuples.
